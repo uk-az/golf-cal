@@ -1,14 +1,12 @@
-param name string
+param accountName string
 param location string
-param environment string
 
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
-  name: name
+  name: accountName
   location: location
   kind: 'GlobalDocumentDB'
   properties: {
     databaseAccountOfferType: 'Standard'
-    enableFreeTier: environment == 'dev'
     consistencyPolicy: {
       defaultConsistencyLevel: 'Session'
     }
@@ -16,6 +14,12 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
       {
         locationName: location
         failoverPriority: 0
+        isZoneRedundant: false
+      }
+    ]
+    capabilities: [
+      {
+        name: 'EnableServerless'
       }
     ]
   }

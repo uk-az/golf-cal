@@ -7,8 +7,7 @@ var namePrefix = '${appId}-${environment}'
 module cosmos 'modules/cosmosdb.bicep' = {
   name: 'cosmos'
   params: {
-    name: 'cosmos-${namePrefix}'
+    accountName: 'cosmos-${namePrefix}'
     location: location
-    environment: environment
   }
 }
