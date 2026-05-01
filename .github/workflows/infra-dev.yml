@@ -1,5 +1,5 @@
 name: infra-deploy
-run-name: infra-deploy-${{ github.ref_name }}
+run-name: infra-deploy-${{ github.ref_name }}-${{ github.event_name }}
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Azure Login (OIDC)
         uses: azure/login@v3
