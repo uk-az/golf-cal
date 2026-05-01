@@ -40,7 +40,6 @@ jobs:
             --template-file infra/bicep/main.bicep \
             --parameters infra/bicep/params/${ENV}.bicepparam
 
-jobs:
   deploy:
     needs: what-if
     runs-on: ubuntu-latest
