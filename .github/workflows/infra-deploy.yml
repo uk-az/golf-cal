@@ -20,8 +20,7 @@ env:
 jobs:
   what-if:
     runs-on: ubuntu-latest
-    environment: ${ENV}
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -33,7 +32,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: What-if
+      - name: What-if (always)
         run: |
           az deployment group what-if \
             --name infra-${ENV}-${GITHUB_RUN_NUMBER} \
@@ -41,23 +40,8 @@ jobs:
             --template-file infra/bicep/main.bicep \
             --parameters infra/bicep/params/${ENV}.bicepparam
 
-  deploy:
-    needs: what-if
-    runs-on: ubuntu-latest
-    environment: ${ENV}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Azure Login (OIDC)
-        uses: azure/login@v3
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Deploy
+      - name: Deploy(only main or manual)
+        if: github.ref_name == 'main' || github.event_name == 'workflow_dispatch'
         run: |
           az deployment group create \
             --mode Incremental \
