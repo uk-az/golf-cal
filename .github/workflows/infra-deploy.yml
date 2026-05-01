@@ -20,7 +20,8 @@ env:
 jobs:
   what-if:
     runs-on: ubuntu-latest
-
+    environment: ${ENV}
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v6
